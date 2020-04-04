@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Promise</title>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <h1>Promise example</h1>
+  <div id="wraper"></div>
+
+  <script>
+    const imgUrl = './images/myLittleVader.jpg';
+    // const imgUrl = 'https://cn.vuejs.org/images/logo.png';
+    const jsUrl = './js/vue.min.js';
+    const jsUrlScripte = 'https://vuejs.org/js/vue.min.js';
+    /**
+     * xhr 加载 image
+     */
+    function loadImage(url) {
+      // 创建 promise 对象
+      return new Promise((resolve, reject) => {
+        // 创建 xhr 对象来 load image
+        let request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.responseType = 'blob';
+        // 检查是否成功
+        request.onload = () => {
+          if (request.status === 200) {
+            resolve(request.response);
+          } else {
+            reject(Error(request.statusText));
+          }
+        }
+        // 错误处理
+        request.onerror = () => {
+          reject(Error('There was a network error.'));
+        }
+        // 发送请求
+        request.send();
+      });
+    }
+    let domWaper = document.querySelector('#wraper');
+    let img = new Image();
+    loadImage(imgUrl).then(response => {
+      let imgURL = window.URL.createObjectURL(response);
+      img.src = imgURL;
+      // img.crossOrigin = 'anonymous';
+      domWaper.append(img);
+    }).catch(error => {
+      console.log(error);
+    });
+    /**
+     * xhr 加载js
+     */
+    function loadJs(url) {
+      return new Promise((resolve, reject) => {
+        let request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.responseType = 'blob';
+        request.onload = () => {
+          if (request.status === 200) {
+            resolve(request.response);
+          } else {
+            reject(Error(request.statusText));
+          }
+        }
+        request.onerror = () => {
+          reject(Error('There was a network errror.'))
+        }
+        request.send();
+      })
+    }
+    let head = document.querySelector('head');
+    let script = document.createElement('script');
+    loadJs(jsUrl).then(response => {
+      let jsURL = window.URL.createObjectURL(response);
+      script.src = jsURL;
+      head.append(script);
+    }).catch(error => {
+      console.log(error);
+    });
+    /**
+     * script 加载js
+     */
+    function loadJsByScript(url) {
+      return new Promise(resolve => {
+        let script = document.createElement('script')
+        if (script.readyState) {
+          script.onreadystatechange = () => {
+            if (script.readyState == 'loaded' || script.readyState == 'complete') {
+              script.onreadystatechange = null
+              resolve(url)
+            }
+          }
+        } else {
+          script.onload = () => { resolve(url) }
+        }
+        script.src = url;
+        script.async = true;
+        document.body.appendChild(script);
+      });
+    }
+    loadJsByScript(jsUrlScripte);
+  </script>
+</body>
+
+</html>

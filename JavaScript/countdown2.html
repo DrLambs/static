@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>倒计时</title>
+	<script>
+		function p(n){
+			return n < 10 ? '0' + n : n ;
+		}
+		function countDown(){
+			var oWrap = document.getElementById('time');
+
+			// 当前时间
+			var startTime = new Date();
+
+			// 结束时间
+			var endTime = new Date('2017/10/1 00:00:00');
+
+			// 计算差值：毫秒数换算成秒
+			var countDown = (endTime.getTime() - startTime.getTime())/1000;
+
+			// 获取天数
+			var oDays = parseInt(countDown/60/60/24);
+
+			// 获取小时数
+			var oHours = parseInt((countDown/60/60)%24);
+
+			// 获取分钟数
+			var oMinutes = parseInt((countDown/60)%60);
+
+			// 获取秒数
+			var oSeconds = parseInt(countDown%60);
+
+			// 计算结果插入DOM
+			var html = p(oDays) + '天' + p(oHours) + '小时' + p(oMinutes) + '分钟' + p(oSeconds) + '秒';
+			oWrap.innerHTML = html;
+
+			// 结束条件
+			if(countDown <= 0){
+				oWrap.innerHTML = '十一到了';
+				//clearInterval(timer);
+			}
+		}
+		window.onload = function(){
+			countDown();
+			timer = setInterval('countDown()', 1000);
+		};
+	</script>
+</head>
+<body>
+	<div id="wrap">
+		距离十一还有：<span id="time"></span>
+	</div>
+</body>
+</html>

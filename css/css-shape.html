@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CSS-Shape</title>
+  <style>
+    body {
+      padding: 50px;
+    }
+    .shape {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      margin-top: 100px;
+    }
+    #box {
+      width: 0;
+      height: 0;
+      border: 50px solid red;
+      border-top-color: blue;
+      border-bottom-color: blue;
+    }
+    .bg {
+      width: 248px;
+      position: relative;
+    }
+    .under {
+      border-bottom: 110px solid #000;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      height: 0;
+      width: 128px;
+      position: relative;
+    }
+    .under::after {
+      content: "";
+      display: block;
+      border-top: 110px solid #000;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      height: 0;
+      width: 128px;
+      position: absolute;
+      top: 110px;
+      left: -60px;
+    }
+    .over {
+      border-bottom: 110px solid #000;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      height: 0;
+      width: 128px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotate(-30deg);
+      transform-origin: bottom center;
+    }
+    .over::after {
+      content: "";
+      display: block;
+      border-top: 110px solid #000;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      height: 0;
+      width: 128px;
+      position: absolute;
+      top: 110px;
+      left: -60px;
+    }
+    .text-wrap {
+      position: absolute;
+      color: #fff;
+      width: 190px;
+      top: 50%;
+      left: 50%;
+      margin-left: -95px;
+      text-align: center;
+      line-height: 30px;
+    }
+    .btn {
+      background-color: #00ff00;
+      color: #000;
+      width: 100px;
+      margin: 0 auto;
+    }
+    #curvedarrow {
+      position: relative;
+      width: 0;
+      height: 0;
+      border-top: 9px solid transparent;
+      border-right: 9px solid red;
+      transform: rotate(10deg);
+    }
+    #curvedarrow:after {
+      content: "";
+      position: absolute;
+      border: 0 solid transparent;
+      border-top: 3px solid red;
+      border-radius: 20px 0 0 0;
+      top: -12px;
+      left: -9px;
+      width: 12px;
+      height: 12px;
+      transform: rotate(45deg);
+    }
+    .curve {
+      width: 120px;
+      height: 120px;
+      border: 0 solid transparent;
+      border-top: 30px solid red;
+      border-radius: 120px 0 0 0;
+      margin-right: 100px;
+      transform: rotate(45deg);
+      position: relative;
+    }
+    .curve::after {
+      content: "";
+      position: absolute;
+      top: -38px;
+      right: -23px;
+      width: 0;
+      height: 0;
+      border-top: 50px solid transparent;
+      border-right: 50px solid red;
+      transform: rotate(-45deg);
+    }
+    #egg {
+      display: block;
+      width: 126px;
+      height: 180px;
+      background-color: red;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    }
+    #pacman {
+      width: 0px;
+      height: 0px;
+      border-right: 60px solid transparent;
+      border-top: 60px solid red;
+      border-left: 60px solid red;
+      border-bottom: 60px solid red;
+      /* border-top-left-radius: 60px;
+      border-top-right-radius: 60px;
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px; */
+      border-radius: 50%;
+    }
+    #yin-yang {
+      width: 96px;
+      box-sizing: content-box;
+      height: 48px;
+      background: #eee;
+      border-color: red;
+      border-style: solid;
+      border-width: 2px 2px 50px 2px;
+      border-radius: 100%;
+      position: relative;
+    }
+    #yin-yang:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      background: #eee;
+      border: 18px solid red;
+      border-radius: 100%;
+      width: 12px;
+      height: 12px;
+      box-sizing: content-box;
+    }
+    #yin-yang:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: red;
+      border: 18px solid #eee;
+      border-radius: 100%;
+      width: 12px;
+      height: 12px;
+      box-sizing: content-box;
+    }
+    #lock {
+      font-size: 8px;
+      position: relative;
+      width: 18em;
+      height: 13em;
+      border-radius: 2em;
+      top: 10em;
+      box-sizing: border-box;
+      border: 3.5em solid red;
+      border-right-width: 7.5em;
+      border-left-width: 7.5em;
+      margin: 0 0 6rem 0;
+    }
+    #lock:before {
+      content: "";
+      box-sizing: border-box;
+      position: absolute;
+      border: 2.5em solid red;
+      width: 14em;
+      height: 12em;
+      left: 50%;
+      margin-left: -7em;
+      top: -12em;
+      border-top-left-radius: 7em;
+      border-top-right-radius: 7em;
+    }
+    #lock:after {
+      content: "";
+      box-sizing: border-box;
+      position: absolute;
+      border: 1em solid red;
+      width: 5em;
+      height: 8em;
+      border-radius: 2.5em;
+      left: 50%;
+      top: -1em;
+      margin-left: -2.5em;
+    }
+  </style>
+</head>
+<body>
+  <a href="https://css-tricks.com/the-shapes-of-css/" target="_blank">the-shapes-of-css</a>
+  <div class="shape">
+    <div class="item">
+      <div id="box"></div>
+    </div>
+    <div class="item">
+      <div class="bg">
+          <div class="under"></div>
+          <div class="over"></div>
+          <div class="text-wrap">
+            <p class="text">抱歉，請前往App，再領取禮物！</p>
+            <div class="btn">確認</div>
+          </div>
+        </div>
+    </div>
+    <div class="item">
+      <div id="curvedarrow"></div>
+    </div>
+    <div class="item">
+      <div class="curve"></div>
+    </div>
+    <div class="item">
+      <div id="egg"></div>
+    </div>
+    <div class="item">
+      <div id="pacman"></div>
+    </div>
+    <div class="item">
+      <div id="yin-yang"></div>
+    </div>
+    <div class="item">
+      <div id="lock"></div>
+    </div>
+  </div>
+</body>
+</html>

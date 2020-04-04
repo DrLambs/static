@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>放大镜</title>
+
+<style>
+#magnifier {position:relative;}
+.small_pic {width:400px;height:225px;float:left;overflow:hidden;margin:10px;position:relative;}
+.small_pic img {max-width: 100%;width: 100%;height: auto;}
+.mark {width:100%;height:100%;position:absolute;z-index:2;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0);}
+.zoom_div {width:50px;height:50px;border:1px solid #ccc;position:absolute;background:#fff;opacity:0.8;filter:alpha(opacity=80);display:none;}
+.big_pic {width:400px;height:225px;float:left;overflow:hidden;position:absolute;top:11px;left:430px;border:1px solid #000;display:none;}
+.big_pic img {position:absolute;top:0px;left:0px;}
+</style>
+
+<script>
+
+function getByClass(oParent, cls){
+	var oParent = document.getElementById(oParent);
+	var aClass = oParent.getElementsByTagName('*');
+	var aTemp = [];
+	
+	for(var i = 0 ; i < aClass.length ; i++){
+		if(aClass[i].className == cls){
+			aTemp.push(aClass[i]);
+		}
+	}
+	
+	return aTemp;
+}
+
+window.onload = function(){
+	var oDiv = document.getElementById('magnifier');
+	var oMark = getByClass('magnifier', 'mark')[0];
+	var oZoom = getByClass('magnifier', 'zoom_div')[0];
+	var oSmall = getByClass('magnifier', 'small_pic')[0];
+	var oBig = getByClass('magnifier', 'big_pic')[0];
+	var oImg = oBig.getElementsByTagName('img')[0];
+	
+	oMark.onmouseover = function(){
+		oZoom.style.display = 'block' ;
+		oBig.style.display = 'block' ;
+	};
+	oMark.onmouseout = function(){
+		oZoom.style.display = 'none' ;
+		oBig.style.display = 'none' ;
+	};
+	oMark.onmousemove = function(ev){
+		var oEvent = ev || event ;
+		var x = oEvent.clientX - oSmall.offsetLeft - oZoom.offsetWidth / 2 ;
+		var y = oEvent.clientY - oSmall.offsetTop - oZoom.offsetHeight / 2 ;
+		
+		if(x < 0){
+			x = 0 ;
+		}else if(x > oSmall.offsetWidth - oZoom.offsetWidth){
+			x = oSmall.offsetWidth - oZoom.offsetWidth + 'px' ;
+		}
+		
+		if(y < 0){
+			y = 0 ;
+		}else if(y > oSmall.offsetHeight - oZoom.offsetHeight){
+			y = oSmall.offsetHeight - oZoom.offsetHeight + 'px' ;
+		}
+		
+		oZoom.style.left = x + 'px' ;
+		oZoom.style.top = y + 'px' ;
+		
+		var percentX = x / (oMark.offsetWidth - oZoom.offsetWidth) ;
+		var percentY = y / (oMark.offsetHeight - oZoom.offsetHeight)
+		
+		oImg.style.left = -percentX * (oImg.offsetWidth-oBig.offsetWidth) + 'px' ;
+		oImg.style.top = -percentY * (oImg.offsetHeight-oBig.offsetHeight) + 'px' ;
+		
+	};
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="magnifier">
+	<div class="small_pic">
+    	<div class="mark"></div>
+    	<div class="zoom_div"></div>
+        <img src="images/small.jpg" />
+    </div>  
+    <div class="big_pic">
+    	<img src="images/big.jpg" />
+    </div>
+</div>
+
+</body>
+</html>

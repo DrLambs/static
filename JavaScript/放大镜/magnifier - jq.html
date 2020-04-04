@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>放大镜</title>
+
+<style>
+#magnifier {position:relative;}
+.small_pic {width:400px;height:225px;float:left;overflow:hidden;margin:10px;position:relative;}
+.small_pic img {max-width: 100%;width: 100%;height: auto;}
+.mark {width:100%;height:100%;position:absolute;z-index:2;left:0px;top:0px;background:#fff;opacity:0;filter:alpha(opacity=0);}
+.zoom_div {width:50px;height:50px;border:1px solid #ccc;position:absolute;background:#fff;opacity:0.8;filter:alpha(opacity=80);display:none;}
+.big_pic {width:400px;height:225px;float:left;overflow:hidden;position:absolute;top:11px;left:430px;border:1px solid #000;display:none;}
+.big_pic img {position:absolute;top:0px;left:0px;}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+
+
+$(function(){
+	//获取各种用到的变量
+	var oDiv = $('#magnifier');
+	var oMark = $('#magnifier .mark');
+	var oZoom = $('#magnifier .zoom_div');		// 移动遮罩
+	var oSmall = $('#magnifier .small_pic');
+	var oBig = $('#magnifier .big_pic');
+	var oBigImg = $('#magnifier .big_pic img');
+
+	oMark.on({
+		// 鼠标移入事件
+		mouseover: function(){
+			oZoom.show();
+			oBig.show();
+		},
+		// 鼠标移入事件
+		mouseout: function(){
+			oZoom.hide();
+			oBig.hide();
+		},
+		// 鼠标移动事件
+		mousemove: function(e){
+			// 鼠标所在位置的坐标
+			var x = e.pageX - oSmall.offset().left - oZoom.width() / 2;
+			var y = e.pageY - oSmall.offset().top - oZoom.height() / 2;
+			// 限制鼠标不移出 oSmall
+			if(x < 0){
+				x = 0 ;
+			}else if(x > oSmall.width() - oZoom.width()){
+				x = oSmall.width() - oZoom.width();
+			}
+			if(y < 0){
+				y = 0 ;
+			}else if(y > oSmall.height() - oZoom.height()){
+				y = oSmall.height() - oZoom.height();
+			}
+			// 让移动遮罩跟随鼠标
+			oZoom.css({
+				'left': x,
+				'top': y
+			});
+			// 计算移动遮罩在小图片中的位置比例
+			var percentX = x / (oMark.width() - oZoom.width()) ;
+			var percentY = y / (oMark.height() - oZoom.height());
+			//console.log(percentX, percentY);
+			// 大图该显示的部分
+			oBigImg.css({
+				'left': -percentX * (oBigImg.width()-oBig.width()),
+				'top': -percentY * (oBigImg.height()-oBig.height())
+			});
+		}
+	});
+});
+	
+</script>
+
+</head>
+
+<body>
+
+<div id="magnifier">
+	<div class="small_pic">
+    	<div class="mark"></div>
+    	<div class="zoom_div"></div>
+        <img src="images/smaller.jpg" />
+    </div>  
+    <div class="big_pic">
+    	<img src="images/big.jpg" />
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>倒计时制作</title>
+    <style>
+        .otime span{display:inline-block;padding: 10px 20px;background-color: red;opacity: 0.5;margin-left: 10px;color:#fff;}
+    </style>
+</head>
+<body>
+    <div class="text">
+       <p>距离十一还剩余:<span id="time" class="otime"></span></p>
+       <p>当前时间：<span id="time1" class="otime"></span></p>
+    </div>
+
+    <script>
+    	var endTimeStr = '2017/10/1 00:00:00';
+    	newTime();
+	    oldTime();
+    	var timer = setInterval('newTime()', 1000);
+    	var timer = setInterval('oldTime()', 1000);
+
+    	//这个函数是为了适应格式 比如：01分01秒;
+	    function p (n){
+	        return n < 10 ? '0'+ n : n;
+	    }
+
+	    //倒计时函数
+	    function newTime (){
+	        //定义当前时间
+	        var startTime = new Date();
+	        //定义结束时间
+	        var endTime = new Date(endTimeStr);
+
+	        //算出中间差并且已毫秒数返回; 除以1000将毫秒数转化成秒数方便运算；
+	        var countDown = (endTime.getTime() - startTime.getTime())/1000;
+
+	        //获取天数 1天 = 24小时  1小时= 60分 1分 = 60秒
+	        var oDay = parseInt(countDown/(24*60*60));
+
+	        //获取小时数
+	        //特别留意 %24 这是因为需要剔除掉整的天数;
+	        var oHours = parseInt(countDown/(60*60)%24);
+
+	        //获取分钟数
+	        //同理剔除掉分钟数
+	        var oMinutes = parseInt(countDown/60%60);
+
+	        //获取秒数
+	        //因为就是秒数  所以取得余数即可
+	        var oSeconds = parseInt(countDown%60);
+
+	        //下面就是插入到页面事先准备容器即可;
+	        var html =  "<span>" + p(oDay) + "天</span>"+ "<span>" + p(oHours) + "时</span>" + "<span>" + p(oMinutes) + "分</span>" +"<span>" + p(oSeconds) + "秒</span>";
+	        document.getElementById('time').innerHTML = html;
+
+	        //别忘记当时间为0的，要让其知道结束了;
+	        if(countDown < 0){
+	            document.getElementById('time').innerHTML = '十一到了';
+	        }
+	    }
+
+	    // 当前时间
+	    function oldTime (){
+	        var oDate = new Date();
+	        //获取年
+	        var oFullyear = oDate.getFullYear();
+	        //获取月份
+	        var oMonth = oDate.getMonth()+1;
+	        //获取日期
+	        var oDta= oDate.getDate();
+	        //获取星期
+	        var oDay = oDate.getDay();
+	        var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+	        //获取小时
+	        var oHours = oDate.getHours();
+	        //获取分钟
+	        var oMinutes = oDate.getMinutes();
+	        //获取秒数
+	        var oSeconds = oDate.getSeconds();
+	        //插入到容器中
+	        var b = "<span>"+ oFullyear +"年</span>" + "<span>"+ oMonth +"月</span>" + "<span>"+ oDta+"日</span>" + "<span>"+ week[oDay] +"</span>" + "<span>"+ p(oHours) +"时</span>" + "<span>"+ p(oMinutes) +"分</span>" + "<span>"+ p(oSeconds) +"秒</span>";
+	        document.getElementById('time1').innerHTML = b;
+	    }
+    </script>
+</body>
+</html>

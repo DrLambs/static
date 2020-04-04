@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>index.html</title>
+</head>
+
+<body>
+  <div style="width:100px;height:100px;background-color:red;"></div>
+  <script>
+    document.querySelector('div').onclick = function () {
+      console.log('hello world');
+    }
+    function fibonacci(n) {
+      return n < 2 ? n : arguments.callee(n - 1) + arguments.callee(n - 2);
+    }
+    console.log(fibonacci(38));
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>drag-js</title>
+    <style>
+        /* 滑动控件容器,亮灰色背景 */
+        #dragContainer{
+            position: relative;
+            background: #e8e8e8;
+            width: 330px;
+            height: 34px;
+            border: 1px solid #e8e8e8;
+            margin: 250px auto;
+            overflow: hidden;
+        }
+        /* 滑块左边部分,绿色背景 */
+        #dragBg{
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            background: #7ac23c;
+            width: 0;
+            height: 100%;
+        }
+        /* 滑动验证容器文本 */
+        #dragText{
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            color: #333;
+            font-size: 14px;
+            text-align: center;
+            line-height: 34px;
+
+            user-select: none;  /* 文本不允许选中 */
+            -webkit-user-select: none;  /* 文本不允许选中 */
+
+            /* background:-webkit-gradient(linear,left top,right top,color-stop(0,#4d4d4d),color-stop(.4,#4d4d4d),color-stop(.5,#fff),color-stop(.6,#4d4d4d),color-stop(1,#4d4d4d));
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            -webkit-animation:slidetounlock 3s infinite;
+            -webkit-text-size-adjust:none; */
+        }
+        /* @-webkit-keyframes slidetounlock{0%{background-position:-200px 0} 100%{background-position:200px 0}} */
+        
+        /* 滑块 */
+        #dragHandler{
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9;
+            width: 34px;
+            height: 100%;
+            cursor: move;
+        }
+        /* 滑块背景 */
+        .dragHandlerBg{
+            background: url(hanlder-bg.jpg) no-repeat 0 0;
+        }
+        /* 滑块验证成功背景 */
+        .dragHandlerBgOk{
+            background: url(hanlder-bg-ok.jpg) no-repeat 0 0;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var dragContainer = document.getElementById('dragContainer');
+            var dragBg = document.getElementById('dragBg');
+            var dragText = document.getElementById('dragText');
+            var dragHandler = document.getElementById('dragHandler');
+            
+            // 按下滑块时候鼠标位置
+            var x;     
+                
+            // 滑块是否移动标记
+            var isMove = false; 
+
+            // 滑块能滑动的最大偏移量  容器宽度 - 滑块宽度
+            var maxHandlerOffset = dragContainer.clientWidth - dragHandler.clientWidth;
+
+            // mousedown 鼠标按下时，记录x位置
+            dragHandler.onmousedown = function(e) {
+                if(e.buttons == 1){
+                    isMove = true; 
+                    x = e.pageX; 
+                }         
+            };
+
+            // mousemove 鼠标滑动的距离 0-maxHandlerOffset
+            document.onmousemove = function(e) {
+                var _x = e.pageX - x;
+
+                if(isMove){
+                    if(_x < 0){
+                        _x = 0;
+                    }
+                    else if(_x > maxHandlerOffset){
+                        _x = maxHandlerOffset;
+                        verifySucc();
+                    }
+                    dragHandler.style.left = _x + 'px';
+                    dragBg.style.width = _x + 'px';
+                }                    
+            };
+
+            // mouseup 鼠标松开，如果没有达到最大距离滑块回到初始位置0
+            document.onmouseup = function(e) {
+                isMove = false;
+                var _x = e.pageX - x;
+                if(_x < maxHandlerOffset){
+                    dragHandler.style.left = 0;
+                    dragBg.style.width = 0;
+                }
+            };
+
+            // 验证成功函数 verifySucc()
+            function verifySucc() {
+                dragText.innerText = '验证成功';
+                dragText.style.color = '#fff';
+                dragHandler.setAttribute('class', 'dragHandlerBgOk');
+                dragHandler.onmousedown = null;
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+
+        };
+    </script>
+</head>
+<body>
+    <div id="dragContainer">
+        <div id="dragBg"></div>
+        <div id="dragText">拖动滑块验证</div>
+        <div id="dragHandler" class="dragHandlerBg"></div>
+    </div>
+</body>
+</html>

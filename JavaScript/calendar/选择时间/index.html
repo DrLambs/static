@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" href="css/time_select.css" />
+	</head>
+	<body>
+		<div class="calendarWarp">
+			<input type="text" name="date" class='ECalendar' id="ECalendar_date"  value="2017-3-1 15:32"/>
+		</div>
+		<script type="text/javascript" src="js/jquery.js" ></script>
+		<script type="text/javascript" src="js/Ecalendar.jquery.min.js" ></script>
+		<script type="text/javascript">
+			$(function(){
+				$("#ECalendar_date").ECalendar({
+					 type:"time",   //模式，time: 带时间选择; date: 不带时间选择;
+					 stamp : false,   //是否转成时间戳，默认true;
+					 offset:[0,2],   //弹框手动偏移量;
+					 format:"yyyy年mm月dd日 hh时ii分",   //时间格式 默认 yyyy-mm-dd hh:ii;
+					 skin:3,   //皮肤颜色，默认随机，可选值：0-8,或者直接标注颜色值;
+					 step:10,   //选择时间分钟的精确度;
+					 callback:function(v,e){} //回调函数
+				});
+			});
+		</script>
+	</body>
+</html>

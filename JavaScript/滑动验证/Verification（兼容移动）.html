@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Drag Verification</title>
+	<style>
+		#v-drag{
+			width: 360px;
+			height: 36px;
+			background: #e8e8e8;
+			text-align: center;
+			position: relative;
+			padding: 0;
+			z-index: 1;
+			margin: 300px auto;
+		}
+		.drag_bg{
+			background: #7AC23C;
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 36px;
+			z-index: 2;
+		}
+		.drag_text{
+			color: #000;
+			font-size: 14px;
+			line-height: 36px;
+			position: relative;
+			z-index: 3;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+		}
+		.handler{
+			width: 34px;
+			height: 34px;
+			background-color: #fff;
+			background-image: url(hanlder-bg.jpg);
+			background-repeat: no-repeat;
+			background-position: 0 0;
+			border: 1px solid #ccc;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 9;
+			cursor: all-scroll;
+		}
+		.handler_bg{
+		 	background-image: url(hanlder-bg.jpg);
+		}
+		.handler_bg_ok{
+			background-image: url(hanlder-bg-ok.jpg);
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script>
+	(function($){
+    	$.fn.vDrag = function(options){
+			var x;
+			var isMove = false;
+			var drag = this;
+			var defaults = {};
+        	var options = $.extend(defaults, options);
+
+            var handler = drag.find('.handler');
+            var drag_bg = drag.find('.drag_bg');
+            var text = drag.find('.drag_text');
+            var maxWidth = drag.width() - handler.width();	// 滑块滑动的最大间距
+
+            // 鼠标按下时 x 轴的位置
+			handler.on('mousedown', function(e){
+				if(e.buttons == 1){
+					isMove = true;
+					x = e.pageX;
+				}
+			});
+
+			// 移动端 touch 事件
+			handler.on('touchstart', function(e){
+				isMove = true;
+				x = e.touches[0].pageX;
+			});
+
+
+
+			$(document).on({
+				mousemove: function(e){
+					var _x = e.pageX - x;
+					dragMove(_x);
+				},
+				mouseup: function(e){
+					var _x = e.pageX - x;
+					dragUp(_x);
+
+				},
+				touchmove: function(e){
+					var _x = e.touches[0].pageX - x;
+					dragMove(_x);
+				},
+				touchend: function(e){
+					console.log(e);
+					var _x = e.changedTouches[0].pageX - x;
+					dragUp(_x);
+				}
+			});
+
+			// 滑块可以移动的距离：x > 0, x < maxWidth
+			function dragMove(dis){
+				var _x = dis;
+				if(isMove){
+					if(_x < 0){
+						_x =0;
+					}else if(_x > maxWidth){
+						_x = maxWidth;
+						dragOk();
+					}else{
+						_x = _x;
+					}
+					handler.css({'left': _x});
+					drag_bg.css({'width': _x});
+				}
+			}
+			// 鼠标松开时，如果没有达到最大距离，滑块返回初始位置
+			function dragUp(dis){
+				isMove = false;
+
+				var _x = dis;
+				if(_x < maxWidth){
+					handler.css({'left': 0});
+					drag_bg.css({'width': 0});
+				}
+			}
+			// 通过验证
+			function dragOk(){
+				text.text('验证通过').css({'color': '#fff'});
+				handler.addClass('handler_bg_ok').removeClass('handler_bg');
+				handler.off('mousedown');
+				$(document).off('mousemove');
+				$(document).off('mouseup');
+			}
+		}
+	})(jQuery);
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div id="v-drag">
+			<div class="drag_bg"></div>
+			<div class="drag_text">拖动滑块验证</div>
+			<div class="handler handler_bg"></div>
+		</div>
+	</div>
+	<script>
+		$('#v-drag').vDrag();
+	</script>
+</body>
+</html>

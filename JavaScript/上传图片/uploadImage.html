@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>图片上传预览/删除</title>
+	</head>
+	<body>
+		<fieldset>
+			<legend>浏览图片文件：</legend>
+			<input type='file' name='fileUpload' id='fileUpload' multiple='multiple' />
+			<ul id='ulUpload'></ul>
+			<input type="submit" name="btnSend" id="btnSend" />
+		</fieldset>
+		<script>
+			window.onload = function(){
+				var oFile = document.getElementById('fileUpload');
+				var oBtn = document.getElementById('btnSend');
+				var oUl = document.getElementById('ulUpload');
+
+				oFile.addEventListener('change', function(){
+					fleUpload_PrevImageFile(this.files);
+				}, false);
+
+				oBtn.onclick = function(){
+					var arrUl = oUl.getElementsByTagName('span');
+
+					var arrImage = [];
+					for(var i = 0; i < arrUl.length; i++){
+						var imgSrc = arrUl[i].getElementsByTagName('img')[0].src;
+						arrImage.push(imgSrc);
+					}
+					console.log(arrImage);
+				}
+			}
+			function fleUpload_PrevImageFile(fileImg) {
+				if(typeof window.FileReader == 'undefined') {
+				  	alert('您的浏览器不支持文件上传功能，请升级或用谷歌浏览器打开。');
+				}
+				else{
+					var strHTML = '';
+					for(var intI = 0; intI < fileImg.length; intI++) {
+						var tmpFile = fileImg[intI];
+						var reader = new FileReader();
+						var rFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+
+						if(!rFilter.test(tmpFile.type)){
+							alert("You must select a valid image file!");
+							return;
+						}
+						reader.readAsDataURL(tmpFile);
+						reader.onload = function (e) {
+							strHTML = strHTML + '<span>';
+							strHTML = strHTML + ' <img src="' + e.target.result + '"/>'
+							strHTML = strHTML + '</span>'
+							document.getElementById('ulUpload').innerHTML = '<li>' + strHTML + '</li>'
+						}
+					}
+				}
+			}
+		</script>
+	</body>
+</html>

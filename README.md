@@ -1,1 +1,1 @@
-# static-resource
+# 静态资源目录：放置常用配置、插件及 demo

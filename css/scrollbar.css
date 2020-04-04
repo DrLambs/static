@@ -1,0 +1,45 @@
+/*滚动条样式*/
+
+/*滚动条整体部分，其中的属性有 width, height, background, border（就和一个块级元素一样）等。*/
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/*滚动条两端的按钮。可以用display: none让其不显示，也可以添加背景图片，颜色改变显示效果。*/
+::-webkit-scrollbar-button {
+  display: none;
+  /*width: 6px;
+  height: 6px;*/
+}
+
+/*外层轨道。可以用display: none让其不显示，也可以添加背景图片，颜色改变显示效果。*/
+::-webkit-scrollbar-track {
+  /*background: #ffffff;
+  border-radius: 6px;*/
+  display: none;
+
+}
+
+/*内层轨道，滚动条中间部分（除去）。*/
+::-webkit-scrollbar-track-piece {
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+/*滚动条里面可以拖动的那部分*/
+::-webkit-scrollbar-thumb {
+  background: #e9e9e9;
+  border-radius: 6px;
+}
+
+/*边角*/
+::-webkit-scrollbar-corner {
+  background: #ffffff;
+  border-radius: 6px;
+}
+
+/*定义右下角拖动块的样式*/
+::-webkit-scrollbar-resizer {
+  background: #ffffff;
+}

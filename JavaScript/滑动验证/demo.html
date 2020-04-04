@@ -1,0 +1,61 @@
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+	html,body { width: 100%; height: 100%; margin: 0; padding: 0; }
+	.warp { width: 180px; height: 30px; border: 1px solid #000; border-radius: 4px; margin: 100px auto;position: relative; }
+	.inner {  width: 30px; height: 30px; background-color: red; border-radius: 4px; overflow: hidden; position: absolute; left: 0; top: 0; }	
+</style>
+<body>
+	<div class="warp">
+		<div class="inner" data-status='no'></div>
+	</div>
+	<object controls="" autoplay="" type="application/x-shockwave-flash" style="outline:none;" data="http://cdn.abowman.com/widgets/hamster/hamster.swf?" width="400" height="225"><param name="movie" value="http://cdn.abowman.com/widgets/hamster/hamster.swf?"><param name="AllowScriptAccess" value="always"><param name="wmode" value="opaque"></object>
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+	window.onload = function () {
+		var dom = $('.inner')
+		init(dom)
+		function init(dom) {
+			var len =  dom.width();
+			var parentLen = dom.parent().width();
+			var moveLen = 0;
+			var lock = false
+
+			dom.on('mousedown', function (event) {
+				console.log(event)
+				moveLen = event.pageX;
+				lock = true;
+			});
+			dom.on('mousemove', function (event) {
+				if(lock) {
+					var num = event.pageX - moveLen;
+				if(num <= 0) {
+					return
+				};
+				if(num >= parentLen - len) {
+					dom.css('left', (parentLen - len) + 'px');
+					dom.off();
+					dom.attr('data-status','ok')
+					return
+				};
+				dom.css('left', num + 'px');	
+				}
+			});
+			dom.on('mouseup', leave);
+			dom.on('mouseout', leave)
+			function leave(event) {
+				lock = false
+				var doneNum = event.pageX -moveLen;
+				console.log(doneNum)
+				if(doneNum > 0 && doneNum < parentLen - len) {
+					dom.css('left',0);
+					return
+				}
+			}
+		};
+	}
+</script>
+</html>
